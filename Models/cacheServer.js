@@ -3,18 +3,16 @@ class CacheServer {
         this.id = id;
         this.capacity = capacity;
         this.videos = new Set();
+        this.usedSpace = 0;
     }
 
     addVideo(video) {
-        if (this.getUsedSpace() + video.size <= this.capacity) {
-            this.videos.add(video.id);
+        if (!this.videos.has(video) && this.usedSpace + video.size <= this.capacity) {
+            this.videos.add(video);
+            this.usedSpace += video.size;
             return true;
         }
         return false;
-    }
-
-    getUsedSpace() {
-        return [...this.videos].reduce((sum, videoId) => sum + videoId.size, 0);
     }
 }
 
