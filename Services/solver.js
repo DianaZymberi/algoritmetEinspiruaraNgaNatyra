@@ -10,11 +10,13 @@ class Solver {
             const endpoint = endpoints[request.endpointId];
 
             const sortedCaches = Object.entries(endpoint.cacheConnections)
-                .sort((a, b) => a[1] - b[1]);
+                .map(([cacheId, latency]) => [Number(cacheId), latency]) // Ensure cacheId is a number
+                .filter(([cacheId]) => cacheId >= 0 && cacheId < cacheServers.length) // Validate range
+                .sort((a, b) => a[1] - b[1]); // Sort by latency
 
             for (const [cacheId] of sortedCaches) {
                 if (cacheServers[cacheId].addVideo(video)) {
-                    break;
+                    break; // Stop adding if successfully placed
                 }
             }
         }
