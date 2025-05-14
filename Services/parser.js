@@ -13,11 +13,6 @@ class Parser {
         const videoSizes = lines[index++].trim().split(/\s+/).map(num => Number(num));
         const videos = videoSizes.map((size, id) => new Video(id, size));
 
-        // const videoSizes = lines[index++].split(" ").map(Number);
-        // console.log(typeof videoSizes);
-        // console.log(Array.isArray(videoSizes)); 
-        // const videos = videoSizes.map((size, id) => new Video(id, size));
-
         const endpoints = [];
         for (let i = 0; i < E; i++) {
             const [LD, K] = lines[index++].split(" ").map(Number);
@@ -36,6 +31,9 @@ class Parser {
             const [videoId, endpointId, count] = lines[index++].split(" ").map(Number);
             requests.push(new Request(videoId, endpointId, count));
         }
+
+        // Debugging request parsing
+        console.log("Parsed requests:", requests);  // This will print the parsed requests to check if it's correct.
 
         const cacheServers = Array.from({ length: C }, (_, id) => new CacheServer(id, X));
 

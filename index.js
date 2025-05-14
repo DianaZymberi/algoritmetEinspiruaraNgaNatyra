@@ -115,22 +115,16 @@ fs.readFile(inputFilePath, "utf8", (err, data) => {
     return;
   }
 
-  // Solver standard
-  const output1 = Solver.solve(data);
-  const { endpoints: e1, requests: r1, cacheServers: c1 } = Parser.parseInput(data);
-  const score1 = calculateScore(e1, r1, c1);
-  fs.writeFileSync("output_solver.txt", output1, "utf8");
-  console.log(`✅ Solver score: ${score1}`);
+  const { output, score } = Solver.solve(data);
 
-  // Greedy Request Solver
-  const result2 = GreedyRequestSolver.solve(data);
-  const score2 = calculateScore(result2.endpoints, result2.requests, result2.cacheServers);
-  fs.writeFileSync("output_greedyRequest.txt", result2.output, "utf8");
-  console.log(`✅ GreedyRequestSolver score: ${score2}`);
+  if (!output || score === undefined) {
+    console.error("Error: Solver did not produce valid output or score.");
+    return;
+  }
 
-  // Greedy Smallest Video Solver (i përmirësuar)
-  const result3 = GreedySmallestVideoSolver.solve(data);
-  const score3 = calculateScore(result3.endpoints, result3.requests, result3.cacheServers);
-  fs.writeFileSync("output_greedySmallest.txt", result3.output, "utf8");
-  console.log(`✅ GreedySmallestVideoSolver score: ${score3}`);
+  console.log(`✅ Solver score: ${score}`);
+  // console.log("Output:\n", output);
+
+  // Write the output to a file
+  fs.writeFileSync("output.txt", output, "utf8");
 });
